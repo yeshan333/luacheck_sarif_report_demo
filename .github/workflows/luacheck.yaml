@@ -1,0 +1,52 @@
+name: luacheck sarif report
+# https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/uploading-a-sarif-file-to-github
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
+    steps:
+      # This step checks out a copy of your repository.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup ‘lua’
+        uses: hishamhm/gh-actions-lua@master
+        with:
+          luaVersion: "5.4"
+      - name: Setup ‘luarocks’
+        uses: hishamhm/gh-actions-luarocks@master
+
+      - name: Setup dependencies
+        run: |
+          git clone https://github.com/yeshan333/luacheck.git
+          cd luacheck
+          luarocks install --deps-only luacheck-dev-1.rockspec
+          luarocks make
+          cd ..
+          rm -rf luacheck
+
+      - name: Run ‘luacheck’ (dogfood)
+        # https://github.com/yeshan333/luacheck/blob/a25463e1bd906c70dea587946aa95067bd4711c3/src/luacheck/main.lua#L341
+        # if has warning or error, exit code will not be equal 0.
+        continue-on-error: true
+        run: |
+          set -o pipefail # https://stackoverflow.com/questions/6871859/piping-command-output-to-tee-but-also-save-exit-code-of-command
+          luacheck --formatter Sarif . | tee output.sarif
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          # Path to SARIF file relative to the root of the repository
+          sarif_file: output.sarif
+          # Optional category for the results
+          # Used to differentiate multiple results for one commit
+          category: luacheck-sarif
