@@ -2,8 +2,13 @@
 
 > 【Demo】 Integrating GitHub Code scanning with luacheck Sarif formatter.
 
-
 workflow ref: [.github/workflows/luacheck.yaml/](.github/workflows/luacheck.yaml)
+
+## View the report
+
+- [https://github.com/yeshan333/luacheck_sarif_report_demo/security/code-scanning](https://github.com/yeshan333/luacheck_sarif_report_demo/security/code-scanning)
+
+![Demo](./result_demo.jpg)
 
 ## References
 
