@@ -10,6 +10,10 @@ workflow ref: [.github/workflows/luacheck.yaml/](.github/workflows/luacheck.yaml
 
 ![Demo](./result_demo.jpg)
 
+[Pull Request](https://github.com/yeshan333/luacheck_sarif_report_demo/pull/1)
+
+![PR Demo](./result_in_pr_demo.png)
+
 ## References
 
 - [SARIF support for code scanning](https://docs.github.com/en/code-security/code-scanning/integrating-with-code-scanning/sarif-support-for-code-scanning)
