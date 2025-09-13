@@ -1,3 +1,6 @@
 {
     "emmylua.workspace.enableReindex": true,
+    "Lua.workspace.library": [
+        "$HOME/.luals/addon"
+    ],
 }
